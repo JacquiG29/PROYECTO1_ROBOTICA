@@ -1,0 +1,21 @@
+#VRML_SIM R2020a utf8
+WorldInfo {
+  CFM 1e-07
+  ERP 0.8
+  basicTimeStep 8
+}
+Viewpoint {
+  orientation -0.03782843700394753 0.9980039938751328 0.05056715893860645 1.8589624861319256
+  position 3.51215152791814 1.2287147251225106 -1.0381378873708322
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  translation 0 0.01 0
+  floorSize 3 3
+}
+Atlas {
+  controller "controlador_proy1"
+}
