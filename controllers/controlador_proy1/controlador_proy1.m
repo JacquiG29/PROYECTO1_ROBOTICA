@@ -52,7 +52,7 @@ l_leg_lax = wb_robot_get_device('LLegLax');
 l_leg_lhy = wb_robot_get_device('LLegLhy');
 l_leg_mhx = wb_robot_get_device('LLegMhx');
 l_leg_uay = wb_robot_get_device('LLegUay');
-l_leg_uaz = wb_robot_get_device('LLegUhz');
+l_leg_uhz = wb_robot_get_device('LLegUhz');
 
 %Right Leg Joints
 r_leg_kny = wb_robot_get_device('RLegKny');
@@ -60,7 +60,7 @@ r_leg_lax = wb_robot_get_device('RLegLax');
 r_leg_lhy = wb_robot_get_device('RLegLhy');
 r_leg_mhx = wb_robot_get_device('RLegMhx');
 r_leg_uay = wb_robot_get_device('RLegUay');
-r_leg_uaz = wb_robot_get_device('RLegUhz');
+r_leg_uhz = wb_robot_get_device('RLegUhz');
 
 
 
@@ -74,10 +74,16 @@ while wb_robot_step(TIME_STEP) ~= -1
   %  rgb = wb_camera_get_image(camera);
 
   % Process here sensor data, images, etc.
-
+  pierna = wb_motor_get_position_sensor(joint_tags);
+  disp(pierna)
   % send actuator commands, e.g.:
-  wb_motor_set_position(l_arm_shx, -1.3)
-  wb_motor_set_position(r_arm_shx, 1.3);
+  %wb_motor_set_position(r_leg_uhz, -0.5);
+  %wb_motor_set_position(r_leg_kny, 0.2);
+  %wb_motor_set_position(r_leg_lhy, -0.2);
+  %wb_motor_set_position(l_arm_shx, 1.5)
+  %wb_motor_set_position(r_arm_shx, 0);
+  %wb_motor_set_position(l_leg_kny, 1.4);
+  %wb_motor_set_position(l_leg_lhy, -0.5);
 
   % if your code plots some graphics, it needs to flushed like this:
   drawnow;

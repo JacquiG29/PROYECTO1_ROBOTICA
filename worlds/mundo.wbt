@@ -5,8 +5,8 @@ WorldInfo {
   basicTimeStep 8
 }
 Viewpoint {
-  orientation -0.03782843700394753 0.9980039938751328 0.05056715893860645 1.8589624861319256
-  position 3.51215152791814 1.2287147251225106 -1.0381378873708322
+  orientation -0.019560553667304546 0.9984637253324371 0.051841816475699076 2.4210150284102316
+  position 2.2359418607042314 1.5060292975356795 -2.490013270363359
 }
 TexturedBackground {
 }
@@ -14,8 +14,24 @@ TexturedBackgroundLight {
 }
 RectangleArena {
   translation 0 0.01 0
-  floorSize 3 3
+  floorSize 4 4
 }
 Atlas {
+  translation 0 0.932172 0
   controller "controlador_proy1"
+}
+OilBarrel {
+  translation 0 0.44 0.8
+}
+OilBarrel {
+  translation 0 0.44 -0.82
+  name "oil barrel(1)"
+}
+OilBarrel {
+  translation -0.57 0.44 0.06
+  name "oil barrel(2)"
+}
+OilBarrel {
+  translation 0.73 0.44 0.06
+  name "oil barrel(3)"
 }
