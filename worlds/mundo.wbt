@@ -3,10 +3,11 @@ WorldInfo {
   CFM 1e-07
   ERP 0.8
   basicTimeStep 8
+  lineScale 0.25
 }
 Viewpoint {
-  orientation -0.019560553667304546 0.9984637253324371 0.051841816475699076 2.4210150284102316
-  position 2.2359418607042314 1.5060292975356795 -2.490013270363359
+  orientation -0.07918245729430326 0.9797351713102412 0.18398133751695642 2.3435137049551438
+  position 2.0764261743788905 1.8852142098387734 -2.105778200689009
 }
 TexturedBackground {
 }
@@ -19,19 +20,4 @@ RectangleArena {
 Atlas {
   translation 0 0.932172 0
   controller "controlador_proy1"
-}
-OilBarrel {
-  translation 0 0.44 0.8
-}
-OilBarrel {
-  translation 0 0.44 -0.82
-  name "oil barrel(1)"
-}
-OilBarrel {
-  translation -0.57 0.44 0.06
-  name "oil barrel(2)"
-}
-OilBarrel {
-  translation 0.73 0.44 0.06
-  name "oil barrel(3)"
 }
