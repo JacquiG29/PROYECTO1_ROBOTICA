@@ -23,6 +23,7 @@ TIME_STEP = 16;%Este valor debe de coincidir con el basicTimeStep?
 %"LLegKny","LLegLax","LLegLhy","LLegMhx","LLegUay","LLegUhz",...
 %"RLegKny","RLegLax","RLegLhy","RLegMhx","RLegUay","RLegUhz"];
 
+%DEFINICIÓN DE TODAS LAS JUNTAS
 juntas=28;
 %Body Joints
 back_lbz = wb_robot_get_device('BackLbz');%1
@@ -68,52 +69,77 @@ r_arm_elx,r_arm_ely,r_arm_mwx,r_arm_shx,r_arm_usy,r_arm_uwy,...
 l_leg_kny,l_leg_lax ,l_leg_lhy,l_leg_mhx,l_leg_uay,l_leg_uhz,...
 r_leg_kny,r_leg_lax ,r_leg_lhy,r_leg_mhx,r_leg_uay,r_leg_uhz];
 
-Kq=diag([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]);
-Kq_p=diag([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]);
+%CONSTANTES PARA CONTROLADOR 
+Kq=0.01*diag([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]);
+Kq_p=0.01*diag([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]);
 
+%VECTORES PARA CONTROLADOR 
 T_actual=zeros(juntas,1);%torque actual
 q=zeros(juntas,1);%posición actual
 q_p=zeros(juntas,1);%velocidad actual
 qss=zeros(juntas,1);%psoción de referencia
 q_p_ss=zeros(juntas,1);%velocidad de referencia
 Tss=zeros(juntas,1);%Torque de referencia
+u=zeros(juntas,1);
+
+%DEFINIR POSICIÓN INCIAL 
+
+%wb_motor_set_position(r_leg_lhy, 0);
+%wb_motor_set_position(r_leg_kny, 0.2);
+wb_motor_set_position(l_arm_shx, -1.3)
+wb_motor_set_position(r_arm_shx, 1.3);
+%wb_motor_set_position(l_leg_kny, 1.4);
+%wb_motor_set_position(l_leg_lhy, -0.5);
+
+%OBTENER LA POSICIÓN Y TORQUE DE TODAS LAS JUNTAS 
+%PARA GENERAR MIS VECTORES DE REFERENCIA
+for a=1:juntas
+    Tss(a)=wb_motor_get_available_torque(joint_tags(a));
+    qss(a)=wb_motor_get_target_position(joint_tags(a));
+end
 % main loop:
 % perform simulation steps of TIME_STEP milliseconds
 % and leave the loop when Webots signals the termination
 %
+disp(Tss);
+disp(qss);
 while wb_robot_step(TIME_STEP) ~= -1
 
   % read the sensors, e.g.:
   %  rgb = wb_camera_get_image(camera);
-  %OPCION 1
-
+  
+  %wb_motor_set_position(l_leg_kny, 0.1);
+  %wb_motor_set_position(r_leg_kny, 0.1);
+ 
+  u=-Kq*(q-qss)-Kq_p*(q_p)+Tss
+  
   for j=1:juntas
     T_actual(j)=wb_motor_get_available_torque(joint_tags(j));
-    q(j)=wb_motor_get_target_position(joint_tags(j));
+    q(j)=wb_motor_get_target_position(joint_tags(j))
     q_p(j)=wb_motor_get_velocity(joint_tags(j));
+    
+    wb_motor_set_position(joint_tags(j),q(j));
+    
+    wb_motor_set_torque(joint_tags(j), u(j));
   end
   
-  disp(q);
-
+  
+  
+  %disp(T_actual);
  % Process here sensor data, images, etc.
-  %pierna = wb_motor_get_position_sensor(joint_tags(1))
-  %disp(pierna)
-  %torqu=wb_motor_get_available_torque('RLegUhz');
-  %disp(torqu)
-  % send actuator commands, e.g.:
-  %wb_motor_set_position(r_leg_uhz, -0.5);
-  wb_motor_set_position(r_leg_kny, 0.2);
-
-  %min = wb_motor_get_min_position(joint_tags)
-  %max = wb_motor_get_max_position(joint_tags)
   
 
-  %disp(torque)
-  %wb_motor_set_position(r_leg_lhy, -0.2);
-  %wb_motor_set_position(l_arm_shx, 1.5)
-  %wb_motor_set_position(r_arm_shx, 0);
-  %wb_motor_set_position(l_leg_kny, 1.4);
-  %wb_motor_set_position(l_leg_lhy, -0.5);
+  %wb_motor_set_position(l_leg_lhy, 0.5);  
+  %wb_motor_set_position(l_leg_mhx, 0.1);
+  %wb_motor_set_position(joint_tags(2), 0.3);
+
+  
+  %wb_motor_set_position(r_leg_lhy, -0.35);
+  %wb_motor_set_position(r_leg_kny, 1.6);
+
+  %CONTROLADOR
+
+
 
   % if your code plots some graphics, it needs to flushed like this:
   drawnow;
