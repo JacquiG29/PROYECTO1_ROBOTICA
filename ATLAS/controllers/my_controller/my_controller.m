@@ -101,7 +101,8 @@ u = zeros(juntas, 1);
 U_hist = [];
 q_hist = [];
 qp_hist = [];
-
+ess=0.001;
+e=0;
 % DEFINIR POSICION INCIAL
 
 % main loop:
@@ -114,44 +115,46 @@ load('Params.mat');
 N_2_target = 1000 / TIME_STEP;
 
 %PARA QUE LLEGUE DE FORMA LENTA A LA POS. DESEADA
-
-
-while wb_robot_step(TIME_STEP) ~= -1
-    
-    % read the sensors, e.g.:
-    %  rgb = wb_camera_get_image(camera);
-    
     for j = 1:juntas
       for n = 1:N_2_target
         ratio = n / N_2_target;
         wb_motor_set_position(joint_tags(j), qss(j) * ratio);
       end
     end
-
+    
+contador=0;
+while wb_robot_step(TIME_STEP) ~= -1
+    
+    % read the sensors, e.g.:
+    %  rgb = wb_camera_get_image(camera);
+    contador=contador+1;
+    
     
     for j = 1:juntas
-        T_actual(j) = wb_motor_get_available_torque(joint_tags(j));
+        %T_actual(j) = wb_motor_get_available_torque(joint_tags(j));
         q_p(j) = wb_motor_get_velocity(joint_tags(j));
-        q(j) = q(j) + q_p(j)*TIME_STEP;
+        q(j) = qss(j) + q_p(j)*TIME_STEP;
     end
     
-     disp(q_p);
+    disp(q_p);
     % Position sensor enable
     
     u = -Kq*(q-qss) - Kq_p*(q_p) + Tss;
-    
-    for j = 1:juntas
-        
-        if u(j) > Tss(j)
-            u(j) = Tss(j);
-        elseif u(j) < -Tss(j)
-            u(j) = -Tss(j);
+    if mean(abs(u-Tss)) > ess
+        for j = 1:juntas
+            
+            if u(j) > Tss(j)
+                u(j) = Tss(j);
+            elseif u(j) < -Tss(j)
+                u(j) = -Tss(j);
+            end
+            
+            %wb_motor_set_position(joint_tags(j), q(j));
+            %if abs(u(j) -Tss(j)) > ess
+            wb_motor_set_torque(joint_tags(j), u(j));
+            %end
         end
-        
-        %wb_motor_set_position(joint_tags(j), q(j));
-        %wb_motor_set_torque(joint_tags(j), u(j));
     end
-    
     %PARA GENERAR PARAMS.M
     %     for a = 1:juntas
     %         %qss(a) = wb_motor_get_target_position(joint_tags(a));
