@@ -1,0 +1,11 @@
+Webots Proto Cache File version 1.4
+protoFileHash: 3db0d9e45b2f1e4fe7f444d1d5946814
+containsDevices: 0
+baseType: Group
+slotType: 
+parameters: 
+tags: hidden
+license:  Copyright Cyberbotics Ltd. Licensed for use only with Webots.
+licenseUrl:  https://cyberbotics.com/webots_assets_license
+documentationUrl: 
+info: Extracted\sfrom:\nhttps://bitbucket.org/osrf/drcsim/src/a43aef617288746c30be76f58afe23a4c3108b5f/ros/atlas_description/meshes/r_scap.dae\n
